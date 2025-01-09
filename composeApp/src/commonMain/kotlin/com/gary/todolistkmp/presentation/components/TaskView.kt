@@ -18,11 +18,13 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.gary.todolistkmp.domain.ToDoTask
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import todolistkmp.composeapp.generated.resources.Res
 import todolistkmp.composeapp.generated.resources.delete
 import todolistkmp.composeapp.generated.resources.star
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun TaskView(
     task: ToDoTask,

@@ -29,23 +29,33 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.gary.todolistkmp.domain.RequestState
+import com.gary.todolistkmp.domain.TaskAction
 import com.gary.todolistkmp.domain.ToDoTask
 import com.gary.todolistkmp.presentation.components.ErrorScreen
 import com.gary.todolistkmp.presentation.components.LoadingScreen
 import com.gary.todolistkmp.presentation.components.TaskView
+import com.gary.todolistkmp.presentation.screen.task.TaskScreen
 
 class HomeScreen : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        val viewModel = getScreenModel<HomeViewModel>()
+        val activeTasks by viewModel.activeTasks
+        val completedTasks by viewModel.completedTasks
+
         Scaffold (
             topBar = {
                 CenterAlignedTopAppBar(title = { Text(text = "Home") })
             },
             floatingActionButton = {
                 FloatingActionButton(
-                    onClick = {},
+                    onClick = { navigator.push(TaskScreen()) },
                     shape = RoundedCornerShape(size = 12.dp)
                 ) {
                     Icon(
@@ -66,35 +76,35 @@ class HomeScreen : Screen {
             ) {
                 DisplayTasks(
                     modifier = Modifier.weight(1f),
-                    tasks = RequestState.Idle,
+                    tasks = activeTasks,
                     onSelect = { selectedTask ->
-                        //navigator.push(TaskScreen(selectedTask))
+                        navigator.push(TaskScreen(selectedTask))
                     },
                     onFavorite = { task, isFavorite ->
-//                        viewModel.setAction(
-//                            action = TaskAction.SetFavorite(task, isFavorite)
-//                        )
+                        viewModel.setAction(
+                            action = TaskAction.SetFavorite(task, isFavorite)
+                        )
                     },
                     onComplete = { task, completed ->
-//                        viewModel.setAction(
-//                            action = TaskAction.SetCompleted(task, completed)
-//                        )
+                        viewModel.setAction(
+                            action = TaskAction.SetCompleted(task, completed)
+                        )
                     }
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 DisplayTasks(
                     modifier = Modifier.weight(1f),
-                    tasks = RequestState.Idle,
+                    tasks = completedTasks,
                     showActive = false,
                     onComplete = { task, completed ->
-//                        viewModel.setAction(
-//                            action = TaskAction.SetCompleted(task, completed)
-//                        )
+                        viewModel.setAction(
+                            action = TaskAction.SetCompleted(task, completed)
+                        )
                     },
                     onDelete = { task ->
-//                        viewModel.setAction(
-//                            action = TaskAction.Delete(task)
-//                        )
+                        viewModel.setAction(
+                            action = TaskAction.Delete(task)
+                        )
                     }
                 )
             }
@@ -102,7 +112,6 @@ class HomeScreen : Screen {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DisplayTasks(
     modifier: Modifier = Modifier,
