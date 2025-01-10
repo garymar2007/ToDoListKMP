@@ -22,3 +22,17 @@ Libraries used:
  - theme-builder: https://m3.material.io/theme-builder
  - voyager: https://voyager.adriel.cafe (A multiplatform navigation library built for, and seamlessly integrated with, Jetpack Compose)
  - koin: Koin is a smart Kotlin dependency injection library to keep you focused on your app, not on your tools
+
+Running apps:
+ - Android: run composeApp in Android Studio IDE
+ - Desktop: ./gradlew run (not working)
+ - iOS: need to run in iOS computer
+
+Release:
+ - Android: In Android Studio IDE: 
+    Go to Build
+      --> Generated Signed App Bundle / APK 
+      --> Create Key store(/home/garyma/todolistkmp.jks)
+      --> keystore password: 123456; key alias: todolistkmp key password: 123456
+      --> build Release
+      --> you will find the compostApp-release.apk file in the composeApp/release folder
